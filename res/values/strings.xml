@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ITInfo</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="loading_data">数据加载中...</string>
+    <string name="information">资讯</string>
+    <string name="franchiser">经销商</string>
+    <string name="manufacturer">厂商</string>
+    <string name="more">更多</string>
+
+</resources>

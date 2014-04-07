@@ -1,0 +1,100 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/top_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:background="@drawable/new_navbg"
+        android:padding="10dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="IT资讯"
+            android:textColor="@color/white" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/new_search_bg"
+            android:drawableLeft="@drawable/umeng_socialize_search_icon"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="搜索" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/main_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+    </FrameLayout>
+
+    <RadioGroup
+        android:id="@+id/menu_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/information_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/menu_radio_button_state"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:padding="@dimen/main_menu_padding"
+            android:text="@string/information"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/franchiser_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/menu_radio_button_state"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="@dimen/main_menu_padding"
+            android:text="@string/franchiser"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/manufacturer_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/menu_radio_button_state"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="@dimen/main_menu_padding"
+            android:text="@string/manufacturer"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/more_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/menu_radio_button_state"
+            android:button="@null"
+            android:gravity="center"
+            android:padding="@dimen/main_menu_padding"
+            android:text="@string/more"
+            android:textColor="@color/white" />
+    </RadioGroup>
+
+</LinearLayout>
