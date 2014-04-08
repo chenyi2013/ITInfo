@@ -8,14 +8,17 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.v4.util.LruCache;
 import android.widget.Toast;
 
 import com.kevin.bean.News;
 import com.kevin.config.Urls;
+import com.kevin.util.CacheUtils;
 import com.kevin.util.DiskLruCache;
 import com.kevin.util.JsonUtils;
 import com.kevin.util.NetworkUtils;
@@ -46,6 +49,12 @@ public class DownloadService extends Service {
 	/** 用于判断是否打印日志信息 */
 	public static boolean isDebug = false;
 
+	/** 内存缓存工具类 */
+	private CacheUtils<String, String> cacheUtils;
+
+	/** 内存缓存 */
+	private LruCache<String, String> cache;
+
 	/** 磁盘缓存 */
 	private DiskLruCache mDiskLruCache;
 
@@ -61,7 +70,7 @@ public class DownloadService extends Service {
 	/** 缓存文件存放的目录 */
 	private static final String DISK_CACHE_SUBDIR = "thumbnails";
 
-	private static final String ENTRY_KEY = "ENTRY_KEY";
+	private static final String ENTRY_KEY = "entry_key";
 
 	private LocalServiceBinder mBinder = new LocalServiceBinder();
 
@@ -71,17 +80,13 @@ public class DownloadService extends Service {
 
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
 
+		cacheUtils = new CacheUtils<String, String>(
+				CacheUtils.getSuggestCacheSize());
+		cache = cacheUtils.getLruCache();
 		File cacheDir = getDiskCacheDir(DISK_CACHE_SUBDIR);
-		try {
-			mDiskLruCache = DiskLruCache
-					.open(cacheDir, 100, 1, DISK_CACHE_SIZE);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new InitDiskCacheTask().execute(cacheDir);
 
 	}
 
@@ -114,70 +119,59 @@ public class DownloadService extends Service {
 
 	public void loadNews(final Handler handler, final int what) {
 
-		try {
-			if (mDiskLruCache.get(ENTRY_KEY + what) != null) {
-				String json = mDiskLruCache.get(ENTRY_KEY + what).getString(0);
+		String json = getStringFromMemCache(ENTRY_KEY + what);
 
-				if (json != null) {
+		if (json == null) {
 
-					ArrayList<News> newsList = JsonUtils.getNewsList(json);
-					Message msg = handler.obtainMessage();
-					msg.obj = newsList;
-					msg.what = what;
-					handler.sendMessage(msg);
-					return;
-
-				}
-
-			}
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			json = getStringFromDiskCache(ENTRY_KEY + what);
 		}
-		NetworkUtils.getDownloadData(Urls.NEWS_URL + what,
-				new NetworkUtils.ObtainDataCallback() {
 
-					@Override
-					public void getByteArrayData(byte[] data) {
-						String json = null;
-						try {
-							json = new String(data, "UTF-8");
+		if (json != null) {
+			ArrayList<News> newsList = JsonUtils.getNewsList(json);
+			Message msg = handler.obtainMessage();
+			msg.obj = newsList;
+			msg.what = what;
+			handler.sendMessage(msg);
 
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						ArrayList<News> newsList = null;
-						if (json != null) {
+		} else {
 
+			NetworkUtils.getDownloadData(Urls.NEWS_URL + what,
+					new NetworkUtils.ObtainDataCallback() {
+
+						@Override
+						public void getByteArrayData(byte[] data) {
+							String json = null;
 							try {
-								newsList = JsonUtils.getNewsList(json);
-							} catch (Exception e) {
-								Toast.makeText(getApplicationContext(),
-										"网络不好，请稍候重试！", Toast.LENGTH_LONG)
-										.show();
-								return;
-							}
+								json = new String(data, "UTF-8");
 
-							Message msg = handler.obtainMessage();
-							msg.obj = newsList;
-							msg.what = what;
-							handler.sendMessage(msg);
-
-							try {
-								DiskLruCache.Editor editor = mDiskLruCache
-										.edit(ENTRY_KEY + what);
-								editor.set(0, json);
-								editor.commit();
-							} catch (IOException e1) {
+							} catch (UnsupportedEncodingException e) {
 								// TODO Auto-generated catch block
-								e1.printStackTrace();
+								e.printStackTrace();
+							}
+							ArrayList<News> newsList = null;
+							if (json != null) {
+
+								try {
+									newsList = JsonUtils.getNewsList(json);
+								} catch (Exception e) {
+									Toast.makeText(getApplicationContext(),
+											"网络不好，请稍候重试！", Toast.LENGTH_LONG)
+											.show();
+									return;
+								}
+
+								Message msg = handler.obtainMessage();
+								msg.obj = newsList;
+								msg.what = what;
+								handler.sendMessage(msg);
+								addStringToCache(ENTRY_KEY + what, json);
+
 							}
 
 						}
+					});
+		}
 
-					}
-				});
 	}
 
 	public File getDiskCacheDir(String uniqueName) {
@@ -188,4 +182,71 @@ public class DownloadService extends Service {
 
 		return new File(cachePath + File.separator + uniqueName);
 	}
+
+	class InitDiskCacheTask extends AsyncTask<File, Void, Void> {
+		@Override
+		protected Void doInBackground(File... params) {
+			synchronized (mDiskCacheLock) {
+				File cacheDir = params[0];
+				try {
+					mDiskLruCache = DiskLruCache.open(cacheDir, 100, 1,
+							DISK_CACHE_SIZE);
+					mDiskCacheStarting = false; // Finished initialization
+					mDiskCacheLock.notifyAll(); // Wake any waiting threads
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+			return null;
+		}
+	}
+
+	public void addStringToCache(String key, String value) {
+		// Add to memory cache as before
+		if (getStringFromMemCache(key) == null) {
+
+			cache.put(key, value);
+		}
+		// Also add to disk cache
+		synchronized (mDiskCacheLock) {
+			try {
+				DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+				editor.set(0, value);
+				editor.commit();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+	}
+
+	public String getStringFromMemCache(String key) {
+		return cache.get(key);
+	}
+
+	public String getStringFromDiskCache(String key) {
+		synchronized (mDiskCacheLock) {
+			// Wait while disk cache is started from background thread
+			while (mDiskCacheStarting) {
+				try {
+					mDiskCacheLock.wait();
+				} catch (InterruptedException e) {
+				}
+			}
+
+			try {
+				if (mDiskLruCache != null && mDiskLruCache.get(key) != null) {
+
+					return mDiskLruCache.get(key).getString(0);
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+
 }

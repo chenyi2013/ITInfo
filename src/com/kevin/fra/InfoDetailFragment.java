@@ -43,8 +43,7 @@ public class InfoDetailFragment extends Fragment {
 
 	/** 用于与DownloadService通信用的Handler */
 	private Handler handler = new Handler() {
-		@SuppressLint("HandlerLeak")
-		@SuppressWarnings("unchecked")
+
 		public void handleMessage(Message msg) {
 			if (msg.what == getArguments().getInt(InformationFragment.NEWS_ID)) {
 
