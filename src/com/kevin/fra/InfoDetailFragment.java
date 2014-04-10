@@ -2,7 +2,6 @@ package com.kevin.fra;
 
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -25,9 +24,18 @@ import com.kevin.bean.News;
 import com.kevin.itinfo.R;
 import com.kevin.services.DownloadService;
 import com.kevin.services.DownloadService.LocalServiceBinder;
+import com.kevin.util.ImageCache;
+import com.kevin.util.ImageCache.ImageCacheParams;
+import com.kevin.util.ImageFetcher;
 import com.kevin.view.PullToRefreshListView;
 
 public class InfoDetailFragment extends Fragment {
+
+	private static final String IMAGE_CACHE_DIR = "thumbs";
+
+	private int mImageThumbSize;
+
+	private ImageFetcher mImageFetcher;
 
 	/** 用于显示新闻列表的ListView */
 	private PullToRefreshListView mInfoList;
@@ -85,7 +93,43 @@ public class InfoDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		mImageThumbSize = getResources().getDimensionPixelSize(
+				R.dimen.image_thumbnail_size);
+		ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(
+				getActivity(), IMAGE_CACHE_DIR);
+		cacheParams.setMemCacheSizePercent(0.25f);
+		mImageFetcher = new ImageFetcher(getActivity(), mImageThumbSize);
+		mImageFetcher.setLoadingImage(R.drawable.empty_photo);
+		mImageFetcher.addImageCache(getActivity().getSupportFragmentManager(),
+				cacheParams);
 
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		mImageFetcher.setExitTasksEarly(false);
+		if (mInfoAdapter != null) {
+			mInfoAdapter.notifyDataSetChanged();
+		}
+
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		mImageFetcher.setPauseWork(false);
+		mImageFetcher.setExitTasksEarly(true);
+		mImageFetcher.flushCache();
+	}
+
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		mImageFetcher.closeCache();
 	}
 
 	@Override
@@ -164,6 +208,8 @@ public class InfoDetailFragment extends Fragment {
 				holder.setNewsDate((TextView) convertView
 						.findViewById(R.id.news_date));
 				holder.setPosition(position);
+				holder.setNewsImg((ImageView) convertView
+						.findViewById(R.id.news_img));
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
@@ -173,7 +219,8 @@ public class InfoDetailFragment extends Fragment {
 			holder.getNewsContent().setText(
 					mNewsList.get(position).getDescription());
 			holder.getNewsDate().setText(mNewsList.get(position).getDate());
-
+			mImageFetcher.loadImage(mNewsList.get(position).getCover(),
+					holder.getNewsImg());
 			return convertView;
 		}
 
