@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -16,6 +17,8 @@ import android.os.Message;
 import android.support.v4.util.LruCache;
 import android.widget.Toast;
 
+import com.kevin.bean.Dealer;
+import com.kevin.bean.Distribution;
 import com.kevin.bean.News;
 import com.kevin.config.Urls;
 import com.kevin.util.CacheUtils;
@@ -113,6 +116,118 @@ public class DownloadService extends Service {
 		public DownloadService getDownloadService() {
 
 			return DownloadService.this;
+		}
+
+	}
+
+	public void loadDistributions(final Handler handler, final int what) {
+		String json = getStringFromMemCache("distributions");
+		if (json == null) {
+
+			json = getStringFromDiskCache("distributions");
+		}
+		if (json != null) {
+			List<Distribution> distributionList = JsonUtils
+					.getDistributionsFromJson(json).getDeDistributions();
+			Message msg = handler.obtainMessage();
+			msg.obj = distributionList;
+			msg.what = what;
+			handler.sendMessage(msg);
+
+		} else {
+			NetworkUtils.getDownloadData(Urls.DISTRIBUTIONS,
+					new NetworkUtils.ObtainDataCallback() {
+
+						@Override
+						public void getByteArrayData(byte[] data) {
+							String json = null;
+							try {
+								json = new String(data, "UTF-8");
+
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							List<Distribution> distributionList = null;
+							if (json != null) {
+
+								try {
+									distributionList = JsonUtils
+											.getDistributionsFromJson(json)
+											.getDeDistributions();
+								} catch (Exception e) {
+									Toast.makeText(getApplicationContext(),
+											"Õ¯¬Á≤ª∫√£¨«Î…‘∫Ú÷ÿ ‘£°", Toast.LENGTH_LONG)
+											.show();
+									return;
+								}
+
+								Message msg = handler.obtainMessage();
+								msg.obj = distributionList;
+								msg.what = what;
+								handler.sendMessage(msg);
+								addStringToCache("distributions", json);
+
+							}
+
+						}
+					});
+
+		}
+	}
+
+	public void loadDealers(final Handler handler, final int what) {
+		String json = getStringFromMemCache("dealers");
+		if (json == null) {
+
+			json = getStringFromDiskCache("dealers");
+		}
+		if (json != null) {
+			List<Dealer> dealerList = JsonUtils.getDealersFromJson(json)
+					.getDealers();
+			Message msg = handler.obtainMessage();
+			msg.obj = dealerList;
+			msg.what = what;
+			handler.sendMessage(msg);
+
+		} else {
+			NetworkUtils.getDownloadData(Urls.DEALER_TYPE,
+					new NetworkUtils.ObtainDataCallback() {
+
+						@Override
+						public void getByteArrayData(byte[] data) {
+							String json = null;
+							try {
+								json = new String(data, "UTF-8");
+
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							List<Dealer> dealerList = null;
+							if (json != null) {
+
+								try {
+									dealerList = JsonUtils.getDealersFromJson(
+											json).getDealers();
+								} catch (Exception e) {
+									Toast.makeText(getApplicationContext(),
+											"Õ¯¬Á≤ª∫√£¨«Î…‘∫Ú÷ÿ ‘£°", Toast.LENGTH_LONG)
+											.show();
+									return;
+								}
+
+								Message msg = handler.obtainMessage();
+								msg.obj = dealerList;
+								msg.what = what;
+								handler.sendMessage(msg);
+								addStringToCache("dealers", json);
+
+							}
+
+						}
+					});
+
 		}
 
 	}
