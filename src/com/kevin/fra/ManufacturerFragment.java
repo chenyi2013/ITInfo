@@ -16,12 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kevin.bean.Distribution;
+import com.kevin.itinfo.PayoutInfoActivity;
 import com.kevin.itinfo.R;
 import com.kevin.services.DownloadService;
 import com.kevin.services.DownloadService.LocalServiceBinder;
@@ -31,6 +34,12 @@ import com.kevin.util.ImageFetcher;
 public class ManufacturerFragment extends Fragment {
 
 	private static final String IMAGE_CACHE_DIR = "thumbs";
+
+	public final static String TITLE = "title";
+
+	public final static String FOCUS = "focus";
+
+	public final static String CONTENT = "content";
 
 	private int mImageThumbSize;
 
@@ -81,6 +90,11 @@ public class ManufacturerFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+
+		Intent intent = new Intent(getActivity(), DownloadService.class);
+		getActivity().bindService(intent, mServiceConnection,
+				Service.BIND_AUTO_CREATE);
+
 		mImageThumbSize = getResources().getDimensionPixelSize(
 				R.dimen.image_thumbnail_size);
 		ImageCache.ImageCacheParams cacheParams = new ImageCache.ImageCacheParams(
@@ -99,6 +113,21 @@ public class ManufacturerFragment extends Fragment {
 		View v = inflater.inflate(R.layout.manufacture_fragment, container,
 				false);
 		gv = (GridView) v.findViewById(R.id.payout_place_grid);
+		gv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adaterView, View view,
+					int position, long id) {
+				Intent intent = new Intent(getActivity(),
+						PayoutInfoActivity.class);
+				intent.putExtra(TITLE, list.get(position).getTitle());
+				intent.putExtra(FOCUS, list.get(position).getFocus());
+				intent.putExtra(CONTENT, list.get(position).getContent());
+
+				startActivity(intent);
+
+			}
+		});
 		gv.setAdapter(adapter);
 		return v;
 	}
@@ -133,6 +162,7 @@ public class ManufacturerFragment extends Fragment {
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+		getActivity().unbindService(mServiceConnection);
 		mImageFetcher.closeCache();
 	}
 
@@ -140,16 +170,14 @@ public class ManufacturerFragment extends Fragment {
 	public void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		Intent intent = new Intent(getActivity(), DownloadService.class);
-		getActivity().bindService(intent, mServiceConnection,
-				Service.BIND_AUTO_CREATE);
+
 	}
 
 	@Override
 	public void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		getActivity().unbindService(mServiceConnection);
+		
 	}
 
 	class MyAdapter extends BaseAdapter {

@@ -16,11 +16,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kevin.bean.News;
+import com.kevin.itinfo.NewsContent;
 import com.kevin.itinfo.R;
 import com.kevin.services.DownloadService;
 import com.kevin.services.DownloadService.LocalServiceBinder;
@@ -32,6 +35,12 @@ import com.kevin.view.PullToRefreshListView;
 public class InfoDetailFragment extends Fragment {
 
 	private static final String IMAGE_CACHE_DIR = "thumbs";
+
+	public final static String NEWS_ID = "news_id";
+
+	public final static String NEWS_TITLE = "news_title";
+
+	public final static String NEWS_COVER = "news_cover";
 
 	private int mImageThumbSize;
 
@@ -168,6 +177,23 @@ public class InfoDetailFragment extends Fragment {
 
 		mInfoList = (PullToRefreshListView) getView().findViewById(
 				R.id.info_list_view);
+		mInfoList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view,
+					int position, long id) {
+
+				News news = mNewsList.get(position - 1);
+
+				Intent intent = new Intent(getActivity(), NewsContent.class);
+				intent.putExtra(NEWS_ID, news.getId());
+				intent.putExtra(NEWS_TITLE, news.getTitle());
+				intent.putExtra(NEWS_COVER, news.getCover());
+
+				startActivity(intent);
+
+			}
+		});
 	}
 
 	private class InfoAdapter extends BaseAdapter {

@@ -16,12 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kevin.bean.Dealer;
+import com.kevin.itinfo.DealerListActivity;
 import com.kevin.itinfo.R;
 import com.kevin.services.DownloadService;
 import com.kevin.services.DownloadService.LocalServiceBinder;
@@ -32,8 +35,11 @@ public class FranchiserFragment extends Fragment {
 
 	private static final String IMAGE_CACHE_DIR = "thumbs";
 
+	public final static String TYPE = "type";
+	public final static String INFO = "info";
+
 	private int mImageThumbSize;
-	
+
 	public final static int SUCCESS = 1;
 
 	private ImageFetcher mImageFetcher;
@@ -101,6 +107,25 @@ public class FranchiserFragment extends Fragment {
 		View v = inflater.inflate(R.layout.saler_main_activity, container,
 				false);
 		centerGridView = (GridView) v.findViewById(R.id.saler_grid);
+
+		centerGridView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view,
+					int position, long id) {
+				ViewHolder viewHolder = (ViewHolder) view.getTag();
+				Dealer dealer = viewHolder.dealer;
+
+				Intent intent = new Intent(getActivity(),
+						DealerListActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putSerializable(TYPE, dealer);
+				intent.putExtra(INFO, bundle);
+
+				startActivity(intent);
+
+			}
+		});
 		return v;
 	}
 

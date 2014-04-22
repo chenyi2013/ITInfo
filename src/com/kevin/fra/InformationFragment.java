@@ -13,8 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class InformationFragment extends Fragment {
-	private static final String[] INFO_MENU = new String[] { "最新", "管理", "行情",
-			"测评", "招聘", "新品" };
+	private static final String[] INFO_MENU = new String[] { "新品", "最新", "管理",
+			"行情", "测评", "招聘" };
+	private static final int[] INFO_MENU_IDS = {2,1,6,3,24,5};
 	public static final String NEWS_ID = "news_id";
 
 	@Override
@@ -56,7 +57,7 @@ public class InformationFragment extends Fragment {
 		public Fragment getItem(int position) {
 			InfoDetailFragment infoDetailFragment = new InfoDetailFragment();
 			Bundle bundle = new Bundle();
-			bundle.putInt(NEWS_ID, position + 1);
+			bundle.putInt(NEWS_ID, INFO_MENU_IDS[position]);
 			infoDetailFragment.setArguments(bundle);
 			return infoDetailFragment;
 		}

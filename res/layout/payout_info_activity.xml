@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffffff"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/new_navbg" >
+
+                <FrameLayout
+                    android:id="@+id/payout_info_map1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10.0dip"
+                   
+                    android:padding="5.0dip"
+                    android:visibility="invisible" />
+
+                <FrameLayout
+                    android:id="@+id/payout_info_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10.0dip"
+                    
+                    android:padding="5.0dip" />
+
+                <TextView
+                    android:id="@+id/payout_info_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/payout_info_map"
+                    android:layout_toRightOf="@+id/payout_info_map1"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:text="商家信息"
+                    android:textColor="@color/white"
+                    android:textSize="20.0sp" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/payout_info_logo"
+                android:layout_width="fill_parent"
+                android:layout_height="160.0dip"
+                android:layout_marginBottom="8.0dip"
+                android:background="@drawable/new_payout_info_logo_640_330"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/payout_info_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:text="广州电科信息科技有限公司成立于2008年12月，专业从事计算机系统集成和产品销售，并为客户提供优质的品牌产品和专业的技术服务。公司主要经营品牌联想电脑：台式机、笔记本、打印机、服务器、数码产品等。同时，设有网络部门，提供专业的网站设计与维护。"
+                android:textColor="@color/black"
+                android:textSize="17.0sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/new_navbg"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/information_article_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="资讯详情"
+            android:textColor="@color/white"
+            android:textSize="@dimen/top_title_textsize" />
+
+        <FrameLayout
+            android:id="@+id/article_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center"
+            android:layout_marginRight="@dimen/btb_right_margin"
+            android:padding="5.0dip" >
+
+            <TextView
+                android:id="@+id/shareButton"
+                android:layout_width="56.0dip"
+                android:layout_height="26.0dip"
+                android:background="@drawable/new_btn_bg"
+                android:gravity="center"
+                android:text="分享"
+                android:textColor="@color/white"
+                android:textSize="13.0sp" />
+        </FrameLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <WebView
+                android:id="@+id/article_wv"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" />
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/loading_progress"
+            android:layout_width="@dimen/progressbar_width"
+            android:layout_height="@dimen/progressbar_width"
+            android:layout_gravity="center"
+            android:indeterminateDrawable="@anim/new_progressbar_anim"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>
