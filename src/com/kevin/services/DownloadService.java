@@ -20,6 +20,10 @@ import android.widget.Toast;
 import com.kevin.bean.Dealer;
 import com.kevin.bean.Distribution;
 import com.kevin.bean.News;
+import com.kevin.bean.Retailer;
+import com.kevin.bean.RetailerInfo;
+import com.kevin.bean.Retailers;
+import com.kevin.bean.Search;
 import com.kevin.config.Urls;
 import com.kevin.util.CacheUtils;
 import com.kevin.util.DiskLruCache;
@@ -118,6 +122,128 @@ public class DownloadService extends Service {
 			return DownloadService.this;
 		}
 
+	}
+
+	public void loadRetailerInfo(final Handler handler, final int what,
+			String key) {
+		String url = Urls.RETAILERS_INFO + key + ".html";
+		NetworkUtils.getDownloadData(url,
+				new NetworkUtils.ObtainDataCallback() {
+
+					@Override
+					public void getByteArrayData(byte[] data) {
+						String json = null;
+						try {
+							json = new String(data, "UTF-8");
+
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						RetailerInfo retailerInfo = null;
+						if (json != null) {
+
+							try {
+								retailerInfo = JsonUtils
+										.getRetailerInfoFromJson(json);
+							} catch (Exception e) {
+								Toast.makeText(getApplicationContext(),
+										"Õ¯¬Á≤ª∫√£¨«Î…‘∫Ú÷ÿ ‘£°", Toast.LENGTH_LONG)
+										.show();
+								return;
+							}
+
+							Message msg = handler.obtainMessage();
+							msg.obj = retailerInfo;
+							msg.what = what;
+							handler.sendMessage(msg);
+
+						}
+
+					}
+				});
+	}
+
+	public void loadRetailers(final Handler handler, final int what,
+			String key, String bandId) {
+		String url = Urls.SEARCH1 + key + "&type=" + bandId + "&cityid=0";
+		NetworkUtils.getDownloadData(url,
+				new NetworkUtils.ObtainDataCallback() {
+
+					@Override
+					public void getByteArrayData(byte[] data) {
+						String json = null;
+						try {
+							json = new String(data, "UTF-8");
+
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						List<Retailer> retailerList = null;
+						if (json != null) {
+
+							try {
+								Retailers retailers = JsonUtils
+										.getRetailersFromJson(json);
+								retailerList = retailers.getRetailersList();
+							} catch (Exception e) {
+								Toast.makeText(getApplicationContext(),
+										"Õ¯¬Á≤ª∫√£¨«Î…‘∫Ú÷ÿ ‘£°", Toast.LENGTH_LONG)
+										.show();
+								return;
+							}
+
+							Message msg = handler.obtainMessage();
+							msg.obj = retailerList;
+							msg.what = what;
+							handler.sendMessage(msg);
+
+						}
+
+					}
+				});
+	}
+
+	public void loadSearchResult(final Handler handler, final int what,
+			String key) {
+		NetworkUtils.getDownloadData(Urls.SEARCH + key,
+				new NetworkUtils.ObtainDataCallback() {
+
+					@Override
+					public void getByteArrayData(byte[] data) {
+						String json = null;
+						try {
+							json = new String(data, "UTF-8");
+
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						List<Search> searchList = null;
+						int count = 0;
+						if (json != null) {
+
+							try {
+								searchList = JsonUtils.getSearch(json);
+								count = JsonUtils.getSearchCount(json);
+							} catch (Exception e) {
+								Toast.makeText(getApplicationContext(),
+										"Õ¯¬Á≤ª∫√£¨«Î…‘∫Ú÷ÿ ‘£°", Toast.LENGTH_LONG)
+										.show();
+								return;
+							}
+
+							Message msg = handler.obtainMessage();
+							msg.obj = searchList;
+							msg.what = what;
+							msg.arg1 = count;
+							handler.sendMessage(msg);
+
+						}
+
+					}
+				});
 	}
 
 	public void loadDistributions(final Handler handler, final int what) {

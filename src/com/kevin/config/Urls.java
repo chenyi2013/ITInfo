@@ -13,4 +13,10 @@ public class Urls {
 	public static final String DISTRIBUTIONS = "http://app.itabcd.com/json/html/distribution.html";
 
 	public static final String NEWS_CONTENT = "http://app.itabcd.com/json/html/news/";
+
+	public static final String SEARCH = "http://app.itabcd.com/json/search1?key=";
+
+	public static final String SEARCH1 = "http://app.itabcd.com/json/search2?key=";
+
+	public static final String RETAILERS_INFO = "http://app.itabcd.com/json/html/dealer/";
 }

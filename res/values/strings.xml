@@ -2,13 +2,84 @@
 <resources>
 
     <string name="app_name">ITInfo</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="loading_data">数据加载中...</string>
     <string name="information">资讯</string>
     <string name="franchiser">经销商</string>
     <string name="manufacturer">厂商</string>
     <string name="more">更多</string>
+    <string name="image">图片</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="default_loading">正在加载···</string>
+    <string name="itinformation">IT资讯</string>
+    <string name="salercenter">经销商中心</string>
+    <string name="payoutplace">厂商</string>
+    <string name="tab_infor">资讯</string>
+    <string name="tab_saler">经销商</string>
+    <string name="tab_payoutplace">厂商</string>
+    <string name="tab_more">更多</string>
+    <string name="newsContent">详情</string>
+    <string name="share">分享</string>
+    <string name="search">搜索</string>
+    <string name="searchshop">搜索</string>
+    <string name="dealer">经销商</string>
+    <string name="band">绑定</string>
+    <string name="showList">产品集合</string>
+    <string name="showDetail">分销商</string>
+    <string name="infomation_banner_title">IT资讯</string>
+    <string name="umeng_common_action_info_exist">正在下载中.</string>
+    <string name="umeng_common_info_interrupt">下载出错啦，请检查网络后继续。</string>
+    <string name="umeng_common_action_pause">暂停</string>
+    <string name="umeng_common_action_continue">继续</string>
+    <string name="umeng_common_action_cancel">取消</string>
+    <string name="umeng_common_download_notification_prefix">正在下载:</string>
+    <string name="umeng_common_network_break_alert">请连接网络后再尝试！</string>
+    <string name="umeng_common_download_failed">下载失败</string>
+    <string name="pull_to_refresh_tap_label">点击刷新</string>
+    <string name="umeng_socialize_network_break_alert">请连接网络后再尝试！</string>
+    <string name="umeng_socialize_comment">评论</string>
+    <string name="umeng_socialize_back">返回</string>
+    <string name="umeng_socialize_near_At">最近@的好友</string>
+    <string name="umeng_socialize_friends">关注的好友</string>
+    <string name="umeng_socialize_send">发布</string>
+    <string name="umeng_socialize_tip_blacklist">对不起，因为违反了用户协议您已被禁言.</string>
+    <string name="umeng_socialize_tip_loginfailed">登录失败..</string>
+    <string name="umeng_socialize_msg_sec">秒前</string>
+    <string name="umeng_socialize_msg_min">分钟前</string>
+    <string name="umeng_socialize_msg_hor">小时前</string>
+    <string name="umeng_socialize_ucenter_login_title_guide">游客登录</string>
+    <string name="umeng_socialize_ucenter_login_title_platform">登录帐号</string>
+    <string name="UMBreak_Network">未联网</string>
+    <string name="UMUpdateTitle">发现新版本</string>
+    <string name="UMNewVersion">最新版本:</string>
+    <string name="UMUpdateContent">更新内容</string>
+    <string name="UMUpdateSize">仅需要下载:</string>
+    <string name="UMTargetSize">新版本大小:</string>
+    <string name="UMGprsCondition">（提示：非WIFI环境）</string>
+    <string name="UMUpdateNow">立即更新</string>
+    <string name="UMAppUpdate">应用更新</string>
+    <string name="UMNotNow">以后再说</string>
+    <string name="UMToast_IsUpdating">正在更新中....</string>
+    <string name="UMDialog_InstallAPK">最新版本已下载，是否安装？</string>
+    <string name="Message">给我留言</string>
+    <!-- button -->
+    <string name="newest">最新</string>
+    <string name="maneger">管理</string>
+    <string name="hangqing">行情</string>
+    <string name="ceping">测评</string>
+    <string name="zhaopin">招聘</string>
+    <string name="xinpin">新品</string>
+
+    <!-- map -->
+    <string name="show">显示地图</string>
+    <string name="end">终点:</string>
+    <string name="begin">起点:</string>
+    <string name="mapsearch">搜索</string>
+    <string name="poisearch">关键字搜索</string>
+    <string name="error_network">搜索失败,请检查网络连接！</string>
+    <string name="no_result">对不起，没有搜索到相关数据！</string>
+    <string name="bj">北京天安门</string>
+    <string name="mytext">中国家庭院校园区域名字体现</string>
 
 </resources>

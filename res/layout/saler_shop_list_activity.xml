@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/new_list_item_default_big"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/new_navbg" >
+
+                <TextView
+                    android:id="@+id/saler_shop_list_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="商家列表"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/top_title_textsize" />
+
+                <Button
+                    android:id="@+id/saler_shop_city_button"
+                    android:layout_width="80.0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10.0dip"
+                    android:background="@drawable/new_btn_bg"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:paddingLeft="10.0dip"
+                    android:paddingRight="10.0dip"
+                    android:singleLine="true"
+                    android:text="全国"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <ListView
+                android:id="@+id/saler_shop_list_List"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:cacheColorHint="#00000000"
+                android:divider="#ffc0c0c0"
+                android:dividerHeight="0.5dip"
+                android:fadingEdge="none" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/loading_progress"
+            android:layout_width="@dimen/progressbar_width"
+            android:layout_height="@dimen/progressbar_width"
+            android:layout_gravity="center"
+            android:indeterminateDrawable="@anim/new_progressbar_anim"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

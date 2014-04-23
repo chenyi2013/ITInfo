@@ -1,18 +1,20 @@
 package com.kevin.itinfo;
 
-import com.kevin.fra.FranchiserFragment;
-import com.kevin.fra.InformationFragment;
-import com.kevin.fra.ManufacturerFragment;
-import com.kevin.fra.MoreFragment;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+
+import com.kevin.fra.FranchiserFragment;
+import com.kevin.fra.InformationFragment;
+import com.kevin.fra.ManufacturerFragment;
+import com.kevin.fra.MoreFragment;
 
 public class MainActivity extends BaseActivity implements
 		RadioGroup.OnCheckedChangeListener {
@@ -25,6 +27,9 @@ public class MainActivity extends BaseActivity implements
 
 	/** 菜单容器 */
 	private RadioGroup mMenuContainer;
+
+	/** 搜索按钮 */
+	private Button mSearchButton;
 
 	/** 程序的title布局 */
 	private RelativeLayout mTopTitleLayout;
@@ -47,6 +52,17 @@ public class MainActivity extends BaseActivity implements
 	}
 
 	private void initView() {
+
+		mSearchButton = (Button) findViewById(R.id.search_button);
+		mSearchButton.setOnClickListener(new Button.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				openActivity(SearchActivity.class);
+
+			}
+		});
 
 		mTopTitleLayout = (RelativeLayout) findViewById(R.id.top_title);
 

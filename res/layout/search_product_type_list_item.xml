@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="40.0dip"
+    android:background="@drawable/new_list_item_big_selector"
+    android:gravity="center_vertical"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical" >
+
+        <ImageView
+            android:id="@+id/into_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15.0dip"
+            android:layout_marginRight="15.0dip"
+            android:src="@drawable/new_next_icon" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/into_icon"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/search_product_type_item_title"
+                android:layout_width="150.0dip"
+                android:layout_height="25.0dip"
+                android:layout_marginLeft="15.0dip"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="你妹妹撒旦去忘掉亲我的期望的请问大前晚倒萨"
+                android:textColor="@color/black"
+                android:textSize="18.0sp" />
+
+            <TextView
+                android:id="@+id/search_product_type_item_counter"
+                android:layout_width="120.0dip"
+                android:layout_height="25.0dip"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="(8727622款符合条件)"
+                android:textColor="@color/gray"
+                android:textSize="18.0sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>
