@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/new_navbg" >
+
+        <TextView
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="品牌列表"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+    <TextView
+        style="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="所有品牌"
+        android:textColor="#777777" />
+
+    <com.kevin.view.IndexableListView
+        android:id="@+id/brand_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </com.kevin.view.IndexableListView>
+
+</LinearLayout>

@@ -58,6 +58,7 @@
         <activity android:name="com.kevin.itinfo.SearchActivity" />
         <activity android:name="com.kevin.itinfo.SearchShopListActivity" />
         <activity android:name="com.kevin.itinfo.ShopDetailActivity" />
+        <activity android:name="com.kevin.itinfo.BrandListActivity" />
         <activity
             android:name="com.kevin.map.BasicMapActivity"
             android:label="@string/bj" >
@@ -70,7 +71,6 @@
             android:name="com.amapv2.apis.poisearch.PoiKeywordSearchActivity"
             android:label="@string/poisearch" >
         </activity>
-       
     </application>
 
 </manifest>

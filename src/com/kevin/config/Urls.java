@@ -19,4 +19,6 @@ public class Urls {
 	public static final String SEARCH1 = "http://app.itabcd.com/json/search2?key=";
 
 	public static final String RETAILERS_INFO = "http://app.itabcd.com/json/html/dealer/";
+	
+	public static final String NORMAL_BRNADS = "http://app.itabcd.com/json/brand/brandtype?id=";
 }

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.kevin.bean.Dealer;
 import com.kevin.bean.Distribution;
 import com.kevin.bean.News;
+import com.kevin.bean.Normal;
 import com.kevin.bean.Retailer;
 import com.kevin.bean.RetailerInfo;
 import com.kevin.bean.Retailers;
@@ -121,6 +122,46 @@ public class DownloadService extends Service {
 
 			return DownloadService.this;
 		}
+
+	}
+
+	public void loadNormalBrand(final Handler handler, final int what,
+			String key) {
+		String url = Urls.NORMAL_BRNADS + key;
+		NetworkUtils.getDownloadData(url,
+				new NetworkUtils.ObtainDataCallback() {
+
+					@Override
+					public void getByteArrayData(byte[] data) {
+						String json = null;
+						try {
+							json = new String(data, "UTF-8");
+
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Normal normal = null;
+						if (json != null) {
+
+							try {
+								normal = JsonUtils.getNormal(json);
+							} catch (Exception e) {
+								Toast.makeText(getApplicationContext(),
+										"Õ¯¬Á≤ª∫√£¨«Î…‘∫Ú÷ÿ ‘£°", Toast.LENGTH_LONG)
+										.show();
+								return;
+							}
+
+							Message msg = handler.obtainMessage();
+							msg.obj = normal;
+							msg.what = what;
+							handler.sendMessage(msg);
+
+						}
+
+					}
+				});
 
 	}
 

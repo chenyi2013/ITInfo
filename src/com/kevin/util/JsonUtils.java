@@ -16,6 +16,7 @@ import com.kevin.bean.Distribution;
 import com.kevin.bean.Distributions;
 import com.kevin.bean.GoodsInfo;
 import com.kevin.bean.News;
+import com.kevin.bean.Normal;
 import com.kevin.bean.PhoneInfo;
 import com.kevin.bean.QQInfo;
 import com.kevin.bean.Retailer;
@@ -120,18 +121,18 @@ public class JsonUtils {
 	/**
 	 * 解析搜索
 	 */
-	public static List<Search> getSearch(String json){
-		List<Search> list=new ArrayList<Search>();
+	public static List<Search> getSearch(String json) {
+		List<Search> list = new ArrayList<Search>();
 		JSONObject jsonObject;
 		try {
 			jsonObject = new JSONObject(json);
-			if(jsonObject.getInt("total")==0){
+			if (jsonObject.getInt("total") == 0) {
 				return null;
-			}else{
+			} else {
 				JSONArray arr = jsonObject.getJSONArray("list");
-				for(int i=0;i<arr.length();i++){
-					Search s=new Search();
-					JSONObject ob=arr.getJSONObject(i);
+				for (int i = 0; i < arr.length(); i++) {
+					Search s = new Search();
+					JSONObject ob = arr.getJSONObject(i);
 					s.setId(ob.getInt("id"));
 					s.setName(ob.getString("name"));
 					s.setCounter(ob.getString("counter"));
@@ -139,48 +140,49 @@ public class JsonUtils {
 				}
 				return list;
 			}
-			
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+
 		return null;
 	}
+
 	/**
 	 * 解析搜索结果个数
 	 */
-	public static int getSearchCount(String json){
-		int count=0;
+	public static int getSearchCount(String json) {
+		int count = 0;
 		JSONObject jsonObject;
 		try {
 			jsonObject = new JSONObject(json);
-			count=jsonObject.getInt("total"); 
+			count = jsonObject.getInt("total");
 			return count;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
+
 		return 0;
 	}
-	
+
 	/**
-	 * 解析相应商品的商家列表 
+	 * 解析相应商品的商家列表
 	 */
-	
-	public static Retailers getRetailersFromJson(String jsonStr){
+
+	public static Retailers getRetailersFromJson(String jsonStr) {
 		Retailers retailers = new Retailers();
 		List<Retailer> retailersList = new ArrayList<Retailer>();
 		try {
 			JSONObject jsonObject = new JSONObject(jsonStr);
 			JSONArray jsonArray = jsonObject.getJSONArray("list");
-			for(int i=0;i<jsonArray.length();i++){
+			for (int i = 0; i < jsonArray.length(); i++) {
 				Retailer retailer = new Retailer();
 				JSONObject jsObj = jsonArray.getJSONObject(i);
 				JSONArray qqArr = jsObj.getJSONArray("qq");
 				List<QQInfo> qqList = new ArrayList<QQInfo>();
-				for(int j=0;j<qqArr.length();j++){
+				for (int j = 0; j < qqArr.length(); j++) {
 					QQInfo qqInfo = new QQInfo();
 					qqInfo.setQq(qqArr.getString(j));
 					qqList.add(qqInfo);
@@ -190,7 +192,7 @@ public class JsonUtils {
 				retailer.setName(jsObj.getString("name"));
 				JSONArray phoneArr = jsObj.getJSONArray("phone");
 				List<PhoneInfo> phoneList = new ArrayList<PhoneInfo>();
-				for(int m=0;m<phoneArr.length();m++){
+				for (int m = 0; m < phoneArr.length(); m++) {
 					PhoneInfo phoneInfo = new PhoneInfo();
 					phoneInfo.setPhoneNum(phoneArr.getString(m));
 					phoneList.add(phoneInfo);
@@ -205,12 +207,12 @@ public class JsonUtils {
 		}
 		return retailers;
 	}
-	
+
 	/**
 	 * 解析商家详细信息
 	 */
-	
-	public static RetailerInfo getRetailerInfoFromJson(String jsonStr){
+
+	public static RetailerInfo getRetailerInfoFromJson(String jsonStr) {
 		RetailerInfo retailerInfo = new RetailerInfo();
 		try {
 			JSONObject jsonObject = new JSONObject(jsonStr);
@@ -221,25 +223,25 @@ public class JsonUtils {
 			retailerInfo.setDescription(jsonObject.getString("description"));
 			JSONArray jsonArray1 = jsonObject.getJSONArray("coordinate");
 			List<String> coordinateList = new ArrayList<String>();
-			for(int i=0;i<jsonArray1.length();i++){
+			for (int i = 0; i < jsonArray1.length(); i++) {
 				coordinateList.add(jsonArray1.getString(i));
 			}
 			retailerInfo.setCoordinate(coordinateList);
 			JSONArray jsonArray2 = jsonObject.getJSONArray("tel");
 			List<String> telList = new ArrayList<String>();
-			for(int j=0;j<jsonArray2.length();j++){
+			for (int j = 0; j < jsonArray2.length(); j++) {
 				telList.add(jsonArray2.getString(j));
 			}
 			retailerInfo.setTel(telList);
 			JSONArray jsonArray3 = jsonObject.getJSONArray("qq");
 			List<String> qqList = new ArrayList<String>();
-			for(int m=0;m<jsonArray3.length();m++){
+			for (int m = 0; m < jsonArray3.length(); m++) {
 				qqList.add(jsonArray3.getString(m));
 			}
 			retailerInfo.setQq(qqList);
 			JSONArray jsonArray4 = jsonObject.getJSONArray("img");
 			List<String> imgList = new ArrayList<String>();
-			for(int n=0;n<jsonArray4.length();n++){
+			for (int n = 0; n < jsonArray4.length(); n++) {
 				imgList.add(jsonArray4.getString(n));
 			}
 			retailerInfo.setImg(imgList);
@@ -249,9 +251,13 @@ public class JsonUtils {
 		}
 		return retailerInfo;
 	}
-	
-	/**
-	 * 解析厂商列表
-	 */
-	
+
+	public static Normal getNormal(String json) {
+		Gson gson = new Gson();
+		TypeToken<HashMap<String, Normal>> typeToken = new TypeToken<HashMap<String, Normal>>() {
+		};
+		HashMap<String, Normal> map = gson.fromJson(json, typeToken.getType());
+		return map.get("normal");
+	}
+
 }

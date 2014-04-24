@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -18,11 +21,13 @@ import com.kevin.bean.Dealer;
 import com.kevin.bean.GoodsInfo;
 import com.kevin.fra.FranchiserFragment;
 
-public class DealerListActivity extends Activity {
+public class DealerListActivity extends BaseActivity {
 
 	private ListView mProductTypeList;
 	private DealerListAdapter mAdapter;
 	private TextView mTitleTextView;
+	private List<GoodsInfo> mGoodsInfos;
+	public final static String ID = "id";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +37,25 @@ public class DealerListActivity extends Activity {
 		setContentView(R.layout.saler_product_type_activity);
 		mTitleTextView = (TextView) findViewById(R.id.product_type_title);
 		mProductTypeList = (ListView) findViewById(R.id.product_type_List);
+		mProductTypeList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view,
+					int position, long id) {
+				Bundle bundle = new Bundle();
+				bundle.putString(ID, mGoodsInfos.get(position).getId());
+				openActivity(BrandListActivity.class, bundle);
+
+			}
+		});
 
 		Dealer dealer = (Dealer) getIntent().getBundleExtra(
 				FranchiserFragment.INFO).getSerializable(
 				FranchiserFragment.TYPE);
 		if (dealer != null) {
 			mTitleTextView.setText(dealer.getName());
-			mAdapter = new DealerListAdapter(dealer.getGoodInfos());
+			mGoodsInfos = dealer.getGoodInfos();
+			mAdapter = new DealerListAdapter(mGoodsInfos);
 			mProductTypeList.setAdapter(mAdapter);
 			mAdapter.notifyDataSetChanged();
 		}
