@@ -5,8 +5,10 @@ import java.util.List;
 
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,15 +29,16 @@ import com.kevin.bean.Retailer;
 import com.kevin.services.DownloadService;
 import com.kevin.services.DownloadService.LocalServiceBinder;
 
-public class SearchShopListActivity extends BaseActivity {
+public class DealerInfoListActivity extends BaseActivity {
 
 	private String mBandID;
+	private String CityID;
 	private ListView mLv;
+	private final static int REQUEST_CODE = 100;
 	private List<Retailer> mRetailers = new ArrayList<Retailer>();
 	private RetailerListAdapter mAdapter;
 	private Button mAllButton;
 	private String mKey;
-	private int requestCode = 102;
 
 	public final static String RETAILER = "retailer";
 	public final static String BUNDLE = "bundle";
@@ -73,8 +76,7 @@ public class SearchShopListActivity extends BaseActivity {
 				mDownloadService = ((LocalServiceBinder) service)
 						.getDownloadService();
 				if (mBandID != null) {
-					mDownloadService.loadRetailers(handler, SUCCESS, mKey,
-							mBandID);
+					mDownloadService.loadRetailers(handler, SUCCESS, mBandID);
 				}
 			}
 
@@ -96,7 +98,7 @@ public class SearchShopListActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				ViewHolder viewHolder = (ViewHolder) view.getTag();
 				Retailer retailer = viewHolder.retailer;
-				Intent intent = new Intent(SearchShopListActivity.this,
+				Intent intent = new Intent(DealerInfoListActivity.this,
 						ShopDetailActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putSerializable(RETAILER, retailer);
@@ -106,30 +108,33 @@ public class SearchShopListActivity extends BaseActivity {
 			}
 		});
 		mAllButton = (Button) findViewById(R.id.saler_shop_city_button);
+
 		mAllButton.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 
-				Intent intent = new Intent(SearchShopListActivity.this,
+				Intent intent = new Intent(DealerInfoListActivity.this,
 						CityListActivity.class);
-				startActivityForResult(intent, requestCode);
+				startActivityForResult(intent, REQUEST_CODE);
 			}
 		});
 
 		mBandID = getIntent().getStringExtra(SearchActivity.BRAND_ID);
 		mKey = getIntent().getStringExtra(SearchActivity.KEY);
-	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
+		SharedPreferences sharedPreferences = getSharedPreferences(
+				getResources().getString(R.string.city), Context.MODE_PRIVATE);
+		String cityName = sharedPreferences.getString(
+				getResources().getString(R.string.city_name), "È«¹ú");
+		String cityId = sharedPreferences.getString(
+				getResources().getString(R.string.city_id), null);
+		mAllButton.setText(cityName);
 	}
 
 	class RetailerListAdapter extends BaseAdapter {
 		LayoutInflater inflater = LayoutInflater
-				.from(SearchShopListActivity.this);
+				.from(DealerInfoListActivity.this);
 		ViewHolder viewHolder;
 
 		@Override
@@ -179,6 +184,20 @@ public class SearchShopListActivity extends BaseActivity {
 		TextView titleTextView;
 		TextView qqTextView;
 		Retailer retailer;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (CityListActivity.RESULT_CODE == resultCode
+				&& requestCode == REQUEST_CODE) {
+			mAllButton.setText(data.getStringExtra(getResources().getString(
+					R.string.city_name)));
+
+		} else if (resultCode == RESULT_CANCELED) {
+
+		}
 	}
 
 	@Override

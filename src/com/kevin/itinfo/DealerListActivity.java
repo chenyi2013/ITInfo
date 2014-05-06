@@ -44,7 +44,7 @@ public class DealerListActivity extends BaseActivity {
 					int position, long id) {
 				Bundle bundle = new Bundle();
 				bundle.putString(ID, mGoodsInfos.get(position).getId());
-				openActivity(BrandListActivity.class, bundle);
+				openActivity(CopyOfBrandListActivity.class, bundle);
 
 			}
 		});

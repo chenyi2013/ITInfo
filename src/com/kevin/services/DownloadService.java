@@ -17,6 +17,7 @@ import android.os.Message;
 import android.support.v4.util.LruCache;
 import android.widget.Toast;
 
+import com.kevin.bean.Citys;
 import com.kevin.bean.Dealer;
 import com.kevin.bean.Distribution;
 import com.kevin.bean.News;
@@ -196,6 +197,47 @@ public class DownloadService extends Service {
 
 							Message msg = handler.obtainMessage();
 							msg.obj = retailerInfo;
+							msg.what = what;
+							handler.sendMessage(msg);
+
+						}
+
+					}
+				});
+	}
+
+	public void loadRetailers(final Handler handler, final int what,
+			String bandId) {
+		String url = Urls.REALER_LIST_INFO + bandId + "&cityid=5";
+		NetworkUtils.getDownloadData(url,
+				new NetworkUtils.ObtainDataCallback() {
+
+					@Override
+					public void getByteArrayData(byte[] data) {
+						String json = null;
+						try {
+							json = new String(data, "UTF-8");
+
+						} catch (UnsupportedEncodingException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						List<Retailer> retailerList = null;
+						if (json != null) {
+
+							try {
+								Retailers retailers = JsonUtils
+										.getRetailersFromJson(json);
+								retailerList = retailers.getRetailersList();
+							} catch (Exception e) {
+								Toast.makeText(getApplicationContext(),
+										"网络不好，请稍候重试！", Toast.LENGTH_LONG)
+										.show();
+								return;
+							}
+
+							Message msg = handler.obtainMessage();
+							msg.obj = retailerList;
 							msg.what = what;
 							handler.sendMessage(msg);
 
@@ -454,6 +496,63 @@ public class DownloadService extends Service {
 					});
 		}
 
+	}
+
+	/** 加载城市所有城市信息 */
+	public void loadCitys(final Handler handler, final int what) {
+
+		String json = getStringFromMemCache(ENTRY_KEY + "city");
+
+		if (json == null) {
+
+			json = getStringFromDiskCache(ENTRY_KEY + "city");
+		}
+
+		if (json != null) {
+			Citys citys = JsonUtils.getCitys(json);
+			Message msg = handler.obtainMessage();
+			msg.obj = citys;
+			msg.what = what;
+			handler.sendMessage(msg);
+
+		} else {
+
+			NetworkUtils.getDownloadData(Urls.CITY_URL,
+					new NetworkUtils.ObtainDataCallback() {
+
+						@Override
+						public void getByteArrayData(byte[] data) {
+							String json = null;
+							try {
+								json = new String(data, "UTF-8");
+
+							} catch (UnsupportedEncodingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							Citys citys = null;
+							if (json != null) {
+
+								try {
+									citys = JsonUtils.getCitys(json);
+								} catch (Exception e) {
+									Toast.makeText(getApplicationContext(),
+											"网络不好，请稍候重试！", Toast.LENGTH_LONG)
+											.show();
+									return;
+								}
+
+								Message msg = handler.obtainMessage();
+								msg.obj = citys;
+								msg.what = what;
+								handler.sendMessage(msg);
+								addStringToCache(ENTRY_KEY + "city", json);
+
+							}
+
+						}
+					});
+		}
 	}
 
 	public File getDiskCacheDir(String uniqueName) {

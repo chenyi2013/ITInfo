@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.kevin.bean.Citys;
 import com.kevin.bean.Dealer;
 import com.kevin.bean.Dealers;
 import com.kevin.bean.Distribution;
@@ -258,6 +259,11 @@ public class JsonUtils {
 		};
 		HashMap<String, Normal> map = gson.fromJson(json, typeToken.getType());
 		return map.get("normal");
+	}
+
+	public static Citys getCitys(String json) {
+		Gson gson = new Gson();
+		return gson.fromJson(json, Citys.class);
 	}
 
 }
